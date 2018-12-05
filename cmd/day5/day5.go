@@ -6,6 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"io"
 	"os"
+	"strings"
 )
 
 func parse(r io.Reader) (string, error) {
@@ -46,6 +47,49 @@ func reduce(polymer string) string {
 	return reduce(reacted)
 }
 
+func elements(polymer string) []string {
+	index := make(map[string]bool)
+
+	for _, e := range polymer {
+		index[strings.ToLower(string(e))] = true
+	}
+
+	elems := make([]string, 0)
+	for elem := range index {
+		elems = append(elems, elem)
+	}
+
+	return elems
+}
+
+func ShortestWithRemoval(polymer string) string {
+	elems := elements(polymer)
+	candidates := make([]string, 0)
+
+	for _, elem := range elems {
+		removed := removeCaseInsensitive(polymer, elem)
+		candidates = append(candidates, reduce(removed))
+	}
+
+	shortest := candidates[0]
+	for _, candidate := range candidates {
+		if len(candidate) < len(shortest) {
+			shortest = candidate
+		}
+	}
+
+	return shortest
+}
+
+func removeCaseInsensitive(s string, val string) string {
+	return strings.Replace(
+		strings.Replace(s, strings.ToLower(val), "", -1),
+		strings.ToUpper(val),
+		"",
+		-1,
+	)
+}
+
 func main() {
 	input, err := parse(os.Stdin)
 	if err != nil {
@@ -54,4 +98,7 @@ func main() {
 	reduced := reduce(input)
 
 	fmt.Println(fmt.Sprintf("Part one: len(%v)", len(reduced)))
+
+	shortest := ShortestWithRemoval(input)
+	fmt.Println(fmt.Sprintf("Part two: len(%v)", len(shortest)))
 }

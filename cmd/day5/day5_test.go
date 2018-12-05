@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/magiconair/properties/assert"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -38,4 +38,26 @@ func TestReduce(t *testing.T) {
 	for _, scenario := range scenarios {
 		assert.Equal(t, reduce(scenario.in), scenario.out, scenario.in)
 	}
+}
+
+func TestRemoveCaseInsensitive(t *testing.T) {
+	polymer := "dabAcCaCBAcCcaDA"
+	scenarios := []struct {
+		in  string
+		out string
+	}{
+		{in: "a", out: "dbcCCBcCcD"},
+		{in: "A", out: "dbcCCBcCcD"},
+		{in: "b", out: "daAcCaCAcCcaDA"},
+		{in: "B", out: "daAcCaCAcCcaDA"},
+	}
+
+	for _, scenario := range scenarios {
+		assert.Equal(t, removeCaseInsensitive(polymer, scenario.in), scenario.out, scenario.out)
+	}
+}
+
+func TestShortestWithRemoval(t *testing.T) {
+	in := "dabAcCaCBAcCcaDA"
+	assert.Equal(t, len(ShortestWithRemoval(in)), 4)
 }
