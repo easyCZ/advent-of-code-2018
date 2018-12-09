@@ -30,6 +30,24 @@ func (n *Node) SumMetadata() int {
 	return sum
 }
 
+func (n *Node) Value() int {
+	if len(n.children) == 0 {
+		return n.SumMetadata()
+	}
+
+	val := 0
+	for _, md := range n.metadata {
+		if md == 0 {
+			continue
+		}
+		if len(n.children) > md-1 {
+			val += n.children[md-1].Value()
+		}
+	}
+
+	return val
+}
+
 func (n *Node) String() string {
 	var b bytes.Buffer
 	b.WriteString(fmt.Sprintf(`
@@ -89,4 +107,5 @@ func main() {
 	}
 
 	fmt.Println(fmt.Sprintf("Part one: %v", root.SumMetadata()))
+	fmt.Println(fmt.Sprintf("Part two: %v", root.Value()))
 }

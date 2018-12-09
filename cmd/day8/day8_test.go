@@ -44,9 +44,12 @@ func TestNewTree(t *testing.T) {
 	assert.Len(t, node.children, 2)
 	assert.Len(t, node.children[0].children, 0)
 	assert.Len(t, node.children[1].children, 1)
-	assert.Len(t, node.children[1].children[0].children, 0)
 }
 
 func TestNode_SumMetadata(t *testing.T) {
 	assert.Equal(t, tree.SumMetadata(), 138)
+}
+
+func TestNode_Value(t *testing.T) {
+	assert.Equal(t, tree.Value(), 66)
 }
