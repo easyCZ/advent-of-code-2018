@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -21,10 +20,6 @@ Step F must be finished before step E can begin.
 
 	g := parse(&b)
 
-	fmt.Println(g)
-	fmt.Println()
-	fmt.Println(g.AncestorGraph())
-
 	assert.Equal(t, []string{"A", "F"}, g.data["C"])
 	assert.Equal(t, []string{"B", "D"}, g.data["A"])
 	assert.Equal(t, []string{"E"}, g.data["D"])
@@ -33,18 +28,35 @@ Step F must be finished before step E can begin.
 }
 
 func TestOrder(t *testing.T) {
-	g := &Graph{map[string][]string{
+	g := NewGraph(map[string][]string{
 		"C": {"A", "F"},
 		"A": {"B", "D"},
 		"D": {"E"},
 		"B": {"E"},
 		"F": {"E"},
 		"E": {},
-	}}
+	})
 
 	//assert.Equal(t, "C", g.Root())
 	assert.Equal(t, []string{"C", "A", "B", "D", "F", "E"}, g.Order())
 }
+
+func TestExecutePlan(t *testing.T) {
+	g := NewGraph(map[string][]string{
+		"C": {"A", "F"},
+		"A": {"B", "D"},
+		"D": {"E"},
+		"B": {"E"},
+		"F": {"E"},
+		"E": {},
+	})
+
+	//assert.Equal(t, "C", g.Root())
+	baseStepCost = 0
+	time := ExecutePlan(g, 2)
+	assert.Equal(t, 15, time)
+}
+
 
 func TestExclude(t *testing.T) {
 	assert.Equal(t, []string{"A", "B", "D"}, exclude([]string{"A", "B", "C", "D"}, "C"))
