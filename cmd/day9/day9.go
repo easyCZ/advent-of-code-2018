@@ -115,4 +115,7 @@ func NewGame(players, max int) *Game {
 func main() {
 	game := NewGame(400, 71864)
 	fmt.Println(fmt.Sprintf("Part one: %v", game.Play()))
+
+	game2 := NewGame(400, 100 * 71864)
+	fmt.Println(fmt.Sprintf("Part two: %v", game2.Play()))
 }
