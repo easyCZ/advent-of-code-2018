@@ -80,7 +80,6 @@ func maximiseSize(grid [][]int) (x, y, maxSize int) {
 	maxX := 0
 	maxY := 0
 	for i := 1; i <= 300; i++ {
-		fmt.Println("size", i)
 		x, y, power := maximiseSection(grid, i)
 		if power > maxPower {
 			maxSize = i
